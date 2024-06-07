@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дни до дня рождения</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: calc(100% - 22px);
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #d400ff;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #bf18e5;
+}
+
+#error {
+    color: red;
+    margin-top: 20px;
+}
+
+.hidden {
+    display: none;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Дни до дня рождения</h1>
+        <label for="birthday">Выберите дату рождения:</label>
+        <input type="date" id="birthday" name="birthday">
+        <button id="calculateButton">Посчитать дни</button>
+        <p id="result"></p>
+        <p id="error" class="error hidden">Пожалуйста, введите дату рождения</p>
+    </div>
+    <script>
+        
+        const clickButton = document.getElementById('calculateButton');
+        function checkDate() {
+
+            const valueDate = document.getElementById('birthday').value;
+            const outputResult = document.getElementById('result');
+            const fixError = document.getElementById('error');
+            const birthday = new Date(valueDate);
+            const today = new Date();
+
+            if(!valueDate){
+                fixError.classList.remove('hidden');
+                return
+            }
+            else{
+                fixError.classList.add('hidden');
+            }
+            birthday.setFullYear(today.getFullYear());
+
+            if(birthday<today){
+                birthday.setFullYear(today.getFullYear()+1);
+            }
+
+            const diffDays = Math.floor((birthday-today) / (1000*60*60*24));
+
+            outputResult.textContent = `До вашего дня рождения осталось ${diffDays} ${fixWord(diffDays)}`;
+        }
+        function fixWord(diffDays){
+            if(diffDays%10===1 && diffDays!==11){
+                return 'день';
+            }
+            else if (diffDays % 10 >= 2 && diffDays % 10 <= 4 && (diffDays % 100 < 10|| diffDays % 100 >= 20)){
+                return 'дня';
+            }
+            else{
+                return 'дней';
+            }
+        }
+
+        clickButton.addEventListener('click',checkDate);
+        </script>
+</body>
+</html>
